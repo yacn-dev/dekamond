@@ -12,12 +12,15 @@ export function LoginForm() {
   const router = useRouter();
   const { login, isLoading, error, clearError } = useAuth();
   const [phone, setPhone] = useState("");
+  const [validationError, setValidationError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
+    setValidationError(""); // پاک کردن خطاهای قبلی
 
     if (!validateIranianMobile(phone)) {
+      setValidationError("لطفاً شماره موبایل معتبر وارد کنید (فرمت ایران)");
       return;
     }
 
@@ -33,6 +36,8 @@ export function LoginForm() {
     const value = e.target.value;
     setPhone(value);
     
+    // پاک کردن هر دو خطا هنگام تایپ
+    if (validationError) setValidationError("");
     if (error) clearError();
   };
 
@@ -46,16 +51,16 @@ export function LoginForm() {
           placeholder="09xxxxxxxxx"
           value={phone}
           onChange={handlePhoneChange}
-          error={error || undefined}
+          error={validationError || error || undefined} // نمایش هر دو خطا
           disabled={isLoading}
           dir="ltr"
           className="text-left"
         />
       </div>
-      
-      <Button 
-        type="submit" 
-        className="w-full" 
+
+      <Button
+        type="submit"
+        className="w-full"
         isLoading={isLoading}
         disabled={isLoading}
       >
