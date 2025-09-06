@@ -1,1 +1,1 @@
-export { authService, userService, IAuthService, IUserService } from './api';
+export { authService, userService } from './api';
