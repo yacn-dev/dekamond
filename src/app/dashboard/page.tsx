@@ -39,7 +39,6 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <header className="flex justify-between items-center py-8 px-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm mb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
@@ -59,9 +58,7 @@ export default function DashboardPage() {
           </Button>
         </header>
         
-        {/* Main Content */}
         <main className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* User Profile Section */}
           <div className="relative">
             <div className="h-32 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
             <div className="px-8 pb-8">
@@ -89,7 +86,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-8 pb-8">
             <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
               <div className="flex items-center">
@@ -134,7 +130,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Welcome Message */}
           <div className="bg-gradient-to-r from-blue-500 to-indigo-600 mx-8 mb-8 rounded-2xl p-6 text-center">
             <div className="text-white">
               <h3 className="text-xl font-semibold mb-2">به خانواده ما خوش آمدید!</h3>

@@ -1,53 +1,31 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { validateIranianMobile, formatIranianMobile } from "@/lib/validation";
-import { storage } from "@/lib/utils";
-import { User } from "@/types";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LoginForm() {
   const router = useRouter();
+  const { login, isLoading, error, clearError } = useAuth();
   const [phone, setPhone] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    clearError();
 
     if (!validateIranianMobile(phone)) {
-      setError("لطفاً شماره موبایل معتبر وارد کنید (فرمت ایران)");
       return;
     }
 
-    setIsLoading(true);
+    const formattedPhone = formatIranianMobile(phone);
+    const user = await login(formattedPhone);
 
-    try {
-      const formattedPhone = formatIranianMobile(phone);
-      
-      // Make API request
-      const response = await fetch("https://randomuser.me/api/?results=1&nat=us");
-      const data = await response.json();
-      
-      if (data.results && data.results.length > 0) {
-        const user: User = data.results[0];
-        
-        // Store user data in localStorage
-        storage.set("user", user);
-        
-        // Redirect to dashboard
-        router.push("/dashboard");
-      } else {
-        throw new Error("No user data received");
-      }
-    } catch (err) {
-      setError("خطایی در ورود رخ داده است. لطفاً دوباره تلاش کنید.");
-      console.error("Login error:", err);
-    } finally {
-      setIsLoading(false);
+    if (user) {
+      router.push("/dashboard");
     }
   };
 
@@ -55,8 +33,7 @@ export function LoginForm() {
     const value = e.target.value;
     setPhone(value);
     
-    // Clear error when user starts typing
-    if (error) setError("");
+    if (error) clearError();
   };
 
   return (
@@ -69,7 +46,7 @@ export function LoginForm() {
           placeholder="09xxxxxxxxx"
           value={phone}
           onChange={handlePhoneChange}
-          error={error}
+          error={error || undefined}
           disabled={isLoading}
           dir="ltr"
           className="text-left"
@@ -82,7 +59,14 @@ export function LoginForm() {
         isLoading={isLoading}
         disabled={isLoading}
       >
-        ورود
+        {isLoading ? (
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+            در حال ورود...
+          </div>
+        ) : (
+          "ورود"
+        )}
       </Button>
     </form>
   );
